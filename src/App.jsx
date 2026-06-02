@@ -1,0 +1,620 @@
+import React, { useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useForm, ValidationError } from "@formspree/react";
+import {
+  Code2,
+  Shield,
+  Smartphone,
+  Server,
+  FileText,
+  Mail,
+  ExternalLink,
+  X,
+  MousePointerClick,
+} from "lucide-react";
+
+const Github = Code2;
+const Linkedin = ExternalLink;
+const projects = [
+  {
+    title: "BoraScan",
+    type: "Flutter PDF Scanner App",
+    description:
+      "Offline Android-first scanner app that converts images into clean PDF documents with filters, preview, and secure local storage.",
+    tech: ["Flutter", "Dart", "PDF", "Local Storage"],
+    icon: FileText,
+    left: "4%",
+    top: "64%",
+    color: "from-cyan-400 to-blue-600",
+  },
+  {
+    title: "SMART MES",
+    type: "Parcel QR Scanning App",
+    description:
+      "Delivery verification app with parcel QR scanning, item status tracking, REST API integration, and proof image upload.",
+    tech: ["Flutter", "REST API", "QR Scanner", "MockAPI"],
+    icon: Smartphone,
+    left: "28%",
+    top: "64%",
+    color: "from-violet-400 to-purple-700",
+  },
+  {
+    title: "IOT system",
+    type: "earth detector detector",
+    description:
+      "IoT-based prototype to detect ground vibration and send real-time earthquake alerts.",
+    tech: [ "Dashboard", "Database", "Reports"],
+    icon: Code2,
+    left: "52%",
+    top: "64%",
+    color: "from-emerald-400 to-green-700",
+  },
+  {
+    title: "Smart Attendance Management System",
+    type: "IOT based notify system",
+    description:
+      "Server monitoring dashboard using Grafana, Prometheus, Windows Exporter, and visual threshold panels.",
+    tech: ["Grafana", "Prometheus", "Monitoring", "Exporter"],
+    icon: Server,
+    left: "76%",
+    top: "64%",
+    color: "from-orange-400 to-red-600",
+  },
+];
+
+const skills = [
+  { name: "Flutter", icon: Smartphone },
+  { name: "Dart", icon: Code2 },
+  { name: "React", icon: Code2 },
+  { name: "REST API", icon: Server },
+  { name: "SQL", icon: FileText },
+  { name: "Firebase", icon: Server },
+  { name: "Git", icon: Code2 },
+  { name: "Figma", icon: ExternalLink },
+  { name: "Kali Linux", icon: Shield },
+  { name: "Burp Suite", icon: Shield },
+  { name: "Wireshark", icon: Shield },
+  { name: "Grafana", icon: Server },
+];
+
+function FloatingProject({ project, index, onSelect }) {
+  const Icon = project.icon;
+  return (
+    <motion.button
+      type="button"
+      onClick={() => onSelect(project)}
+      className="absolute group w-53 rounded-3xl border border-white/15 bg-white/10 p-4 text-left shadow-2xl backdrop-blur-xl transition hover:border-white/35"
+      style={{
+        left: project.left,
+        top: project.top,
+        transformStyle: "preserve-3d",
+      }}
+      initial={{ opacity: 0, y: 30, rotateY: index % 2 === 0 ? -16 : 16 }}
+      animate={{
+        opacity: 1,
+        y: [0, -16, 0],
+        rotateY: index % 2 === 0 ? -8 : 8,
+      }}
+      transition={{
+        opacity: { duration: 0.6, delay: index * 0.12 },
+        y: { duration: 4 + index, repeat: Infinity, ease: "easeInOut" },
+        rotateY: { duration: 0.8 },
+      }}
+      whileHover={{ scale: 1.08, z: 60 }}
+      whileTap={{ scale: 0.95 }}
+    >
+<div
+  className={`mb-3 flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br ${project.color} shadow-lg`}
+>
+  <Icon className="h-4 w-4 text-white" />
+</div>
+      <h3 className="text-base font-bold text-white">{project.title}</h3>
+      <p className="mt-1 text-xs text-slate-300">{project.type}</p>
+      <div className="mt-3 flex items-center gap-1 text-xs text-cyan-200 opacity-0 transition group-hover:opacity-100">
+        <MousePointerClick className="h-3 w-3" /> Click to view
+      </div>
+    </motion.button>
+  );
+}
+
+function ProjectModal({ project, onClose }) {
+  return (
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-5 backdrop-blur-md"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <motion.div
+          className="w-full max-w-xl rounded-[2rem] border border-white/15 bg-slate-950 p-6 text-white shadow-2xl"
+          initial={{ scale: 0.88, y: 30, opacity: 0 }}
+          animate={{ scale: 1, y: 0, opacity: 1 }}
+          exit={{ scale: 0.88, y: 30, opacity: 0 }}
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-sm font-medium text-cyan-300">{project.type}</p>
+              <h2 className="mt-1 text-3xl font-black">{project.title}</h2>
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-full border border-white/10 bg-white/10 p-2 hover:bg-white/20"
+              aria-label="Close modal"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          <p className="mt-5 leading-7 text-slate-300">{project.description}</p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            {project.tech.map((item) => (
+              <span key={item} className="rounded-full bg-white/10 px-3 py-1 text-sm text-slate-200">
+                {item}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-7 flex flex-wrap gap-3">
+            <button className="inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-2 font-semibold text-slate-950 hover:bg-slate-200">
+              <Code2 className="h-4 w-4" /> GitHub
+            </button>
+            <button className="inline-flex items-center gap-2 rounded-2xl border border-white/15 px-4 py-2 font-semibold text-white hover:bg-white/10">
+              <ExternalLink className="h-4 w-4" /> Live Demo
+            </button>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+export default function ThreeDPortfolioTemplate() {
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const currentYear = useMemo(() => new Date().getFullYear(), []);
+
+  const handleMouseMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width - 0.5) * 18;
+    const y = ((event.clientY - rect.top) / rect.height - 0.5) * -18;
+    setTilt({ x, y });
+  };
+
+  function SecureContactForm() {
+    const [state, handleSubmit] = useForm("xqejoodz");
+    const [step, setStep] = useState(0);
+
+    const [formData, setFormData] = useState({
+      name: "",
+      email: "",
+      projectType: "",
+      budget: "",
+      message: "",
+    });
+
+    const steps = [
+      {
+        title: "What is your name?",
+        field: "name",
+        type: "text",
+        placeholder: "Enter your name",
+      },
+      {
+        title: "What is your email?",
+        field: "email",
+        type: "email",
+        placeholder: "Enter your email",
+      },
+      {
+        title: "What type of project do you need?",
+        field: "projectType",
+        type: "select",
+        placeholder: "Select project type",
+        options: [
+          "Portfolio Website",
+          "Flutter Mobile App",
+          "Web System",
+          "Dashboard",
+          "UI Improvement",
+          "Cybersecurity Consultation",
+          "Other",
+        ],
+      },
+      {
+        title: "What is your budget range?",
+        field: "budget",
+        type: "text",
+        placeholder: "Example: RM200 - RM500",
+      },
+      {
+        title: "Tell me about your project",
+        field: "message",
+        type: "textarea",
+        placeholder:
+          "Describe your project idea, features, deadline, and any reference website/app.",
+      },
+    ];
+
+    const currentStep = steps[step];
+    const isLastStep = step === steps.length - 1;
+
+    const handleChange = (event) => {
+      setFormData({
+        ...formData,
+        [currentStep.field]: event.target.value,
+      });
+    };
+
+    const goNext = () => {
+      const value = formData[currentStep.field].trim();
+
+      if (!value && currentStep.field !== "budget") {
+        alert("Please fill in this field first.");
+        return;
+      }
+
+      if (currentStep.field === "message" && value.length < 20) {
+        alert("Project description must be at least 20 characters.");
+        return;
+      }
+
+      setStep((prev) => prev + 1);
+    };
+
+    const goBack = () => {
+      setStep((prev) => prev - 1);
+    };
+
+    if (state.succeeded) {
+      return (
+        <div className="rounded-[2rem] border border-green-400/20 bg-green-400/10 p-6 text-center">
+          <p className="text-xl font-bold text-green-300">
+            Request sent successfully.
+          </p>
+
+          <p className="mt-2 text-slate-300">
+            Thank you. I received your project request and will reply through email.
+          </p>
+
+          <p className="mt-2 text-xs text-slate-400">
+            Notification sent to portfolio owner.
+          </p>
+        </div>
+      );
+    }
+
+    return (
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Hidden fields submitted to Formspree */}
+        <input type="hidden" name="name" value={formData.name} />
+        <input type="hidden" name="email" value={formData.email} />
+        <input type="hidden" name="projectType" value={formData.projectType} />
+        <input type="hidden" name="budget" value={formData.budget} />
+        <input type="hidden" name="message" value={formData.message} />
+
+        {/* Honeypot field for spam bots */}
+        <input
+          type="text"
+          name="_gotcha"
+          className="hidden"
+          tabIndex="-1"
+          autoComplete="off"
+        />
+
+        <div className="rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold text-cyan-200">
+              Question {step + 1} of {steps.length}
+            </p>
+            <p className="text-xs text-cyan-300">
+              {Math.round(((step + 1) / steps.length) * 100)}%
+            </p>
+          </div>
+
+          <div className="mt-2 h-1 overflow-hidden rounded-full bg-cyan-300/20">
+            <div
+              className="h-full bg-gradient-to-r from-cyan-400 to-cyan-300 transition-all duration-300"
+              style={{
+                width: `${((step + 1) / steps.length) * 100}%`,
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-white/10 bg-white/[0.05] p-6 backdrop-blur-xl">
+          <div className="mb-6">
+            <h3 className="text-2xl font-bold text-white">
+              {currentStep.title}
+            </h3>
+
+            {currentStep.type === "select" ? (
+              <select
+                value={formData[currentStep.field]}
+                onChange={handleChange}
+                className="mt-4 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-white outline-none transition focus:border-cyan-300/50"
+              >
+                <option value="">{currentStep.placeholder}</option>
+
+                {currentStep.options.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            ) : currentStep.type === "textarea" ? (
+              <textarea
+                value={formData[currentStep.field]}
+                onChange={handleChange}
+                placeholder={currentStep.placeholder}
+                rows="5"
+                className="mt-4 w-full resize-none rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-white outline-none transition focus:border-cyan-300/50"
+              />
+            ) : (
+              <input
+                type={currentStep.type}
+                value={formData[currentStep.field]}
+                onChange={handleChange}
+                placeholder={currentStep.placeholder}
+                className="mt-4 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-white outline-none transition focus:border-cyan-300/50"
+              />
+            )}
+
+            <p className="mt-4 text-xs text-slate-400">
+              Press Next to continue.
+            </p>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-4 text-sm leading-6 text-slate-300">
+          <p className="font-semibold text-cyan-200">Secure request notice</p>
+          <p className="mt-1">
+            Please avoid sending passwords, bank details, API keys, or private
+            credentials through this form.
+          </p>
+        </div>
+
+        <div className="flex gap-3">
+          {step > 0 && (
+            <button
+              type="button"
+              onClick={goBack}
+              className="rounded-2xl border border-white/15 px-5 py-3 font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-white/10"
+            >
+              Back
+            </button>
+          )}
+
+          {!isLastStep ? (
+            <button
+              type="button"
+              onClick={goNext}
+              className="flex-1 rounded-2xl bg-cyan-300 px-5 py-3 font-bold text-slate-950 transition-all duration-300 hover:-translate-y-1 hover:bg-cyan-200 hover:shadow-xl hover:shadow-cyan-500/20 active:scale-95"
+            >
+              Next
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={state.submitting}
+              className="flex-1 rounded-2xl bg-cyan-300 px-5 py-3 font-bold text-slate-950 transition-all duration-300 hover:-translate-y-1 hover:bg-cyan-200 hover:shadow-xl hover:shadow-cyan-500/20 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {state.submitting ? "Sending..." : "Send Secure Project Request"}
+            </button>
+          )}
+        </div>
+      </form>
+    );
+  }
+
+  return (
+    <div className="min-h-screen overflow-hidden bg-[#050816] text-white">
+      <div className="pointer-events-none fixed inset-0 opacity-70">
+        <div className="absolute left-[-10%] top-[-10%] h-80 w-80 rounded-full bg-cyan-500/20 blur-3xl" />
+        <div className="absolute right-[-8%] top-[20%] h-96 w-96 rounded-full bg-purple-500/20 blur-3xl" />
+        <div className="absolute bottom-[-20%] left-[30%] h-96 w-96 rounded-full bg-blue-500/20 blur-3xl" />
+      </div>
+
+      <header className="relative z-40 mx-auto mt-5 flex w-[95%] max-w-7xl items-center justify-between rounded-3xl border border-white/10 bg-slate-950/60 px-6 py-4 backdrop-blur-xl">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-slate-950 shadow-lg">
+            S
+          </div>
+          <div>
+            <h1 className="font-bold tracking-wide">Syed Developer Space</h1>
+          </div>
+        </div>
+
+        <nav className="hidden items-center gap-2 text-sm backdrop-blur-xl md:flex">
+          <a href="#about" className="rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">About</a>
+          <a href="#projects" className="rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Projects</a>
+          <a href="#skills" className=" rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Skills</a>
+          <a href="#contact" className="rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Contact</a>
+        </nav>
+      </header>
+      <main className="relative z-10">
+        <section className="mx-auto min-h-[calc(100vh-92px)] max-w-7xl px-6 py-10">
+          <div className="relative z-10">
+           
+
+            <motion.h2
+              className="max-w-2xl text-5xl font-black leading-tight md:text-7xl"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              Building secure apps with interactive digital experiences.
+            </motion.h2>
+
+            <motion.p
+              className="mt-6 max-w-xl text-lg leading-8 text-slate-300"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              A portfolio concept for showcasing Flutter projects, cybersecurity skills, FYP work, and infrastructure monitoring experience in a 3D-style workspace.
+            </motion.p>
+
+            <motion.div
+              className="mt-8 flex flex-wrap gap-3"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <a href="#projects" className="rounded-2xl bg-white px-5 py-3 font-bold text-slate-950 shadow-lg hover:bg-slate-200">
+                View Projects
+              </a>
+              <a href="#contact" className="rounded-2xl border border-white/15 px-5 py-3 font-bold text-white hover:bg-white/10">
+                Contact Me
+              </a>
+            </motion.div>
+          </div>
+
+        </section>
+
+        <section id="about" className="mx-auto max-w-7xl px-6 py-16">
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="rounded-[2rem] border border-white/10 bg-white/[0.05] p-6 backdrop-blur-xl lg:col-span-2">
+              <p className="text-sm font-semibold text-cyan-300">About Me</p>
+              <h2 className="mt-2 text-3xl font-black">Security-aware developer focused on practical apps.</h2>
+              <p className="mt-4 leading-8 text-slate-300">
+                I am a Computer Science student majoring in Cybersecurity. My work focuses on Flutter app development, REST API integration, secure app design, and monitoring systems using tools like Grafana and Prometheus.
+              </p>
+            </div>
+            <div className="rounded-[2rem] border border-white/10 bg-white/[0.05] p-6 backdrop-blur-xl">
+              <Shield className="h-9 w-9 text-cyan-300" />
+              <h3 className="mt-4 text-xl font-bold">Portfolio Angle</h3>
+              <p className="mt-3 leading-7 text-slate-300">
+                Show that you are not just a coder, but a developer who understands security, monitoring, and real-world systems.
+              </p>
+            </div>
+          </div>
+        </section>
+
+<section id="skills" className="mx-auto max-w-7xl px-6 py-16">
+  <p className="text-sm font-semibold text-cyan-300">Skills</p>
+  <h2 className="mt-2 text-3xl font-black">Tech stack and tools</h2>
+
+  <div className="relative mt-8 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] py-5">
+    <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-24 bg-gradient-to-r from-[#050816] to-transparent" />
+    <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-24 bg-gradient-to-l from-[#050816] to-transparent" />
+
+    <motion.div
+      className="flex w-max gap-4"
+      animate={{ x: ["0%", "-50%"] }}
+      transition={{
+        duration: 45,
+        repeat: Infinity,
+        ease: "linear",
+      }}
+    >
+      {[...skills, ...skills].map((skill, index) => {
+        const Icon = skill.icon;
+
+        return (
+          <div
+            key={`${skill.name}-${index}`}
+            className="flex min-w-[170px] items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/70 px-5 py-4 text-slate-200 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-cyan-300/10 hover:text-white"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-300">
+              <Icon className="h-5 w-5" />
+            </div>
+            <span className="font-semibold">{skill.name}</span>
+          </div>
+        );
+      })}
+    </motion.div>
+  </div>
+</section>
+<section id="projects" className="mx-auto max-w-7xl px-6 py-16" onMouseMove={handleMouseMove}>
+  <p className="text-sm font-semibold text-cyan-300">Projects</p>
+  <h2 className="mt-2 text-3xl font-black">Featured projects</h2>
+
+  <div className="relative mt-8 h-[560px] min-h-[520px] perspective-[1200px]">
+    <motion.div
+      className="absolute inset-0 rounded-[3rem] border border-white/10 bg-white/[0.04] shadow-2xl backdrop-blur-sm"
+      animate={{ rotateX: tilt.y, rotateY: tilt.x }}
+      transition={{ type: "spring", stiffness: 90, damping: 18 }}
+      style={{ transformStyle: "preserve-3d" }}
+    >
+      <div className="absolute left-1/2 top-1/2 h-72 w-96 -translate-x-1/2 -translate-y-1/2 rounded-[2rem] border border-white/15 bg-slate-900/90 p-5 shadow-2xl" style={{ transform: "translateZ(80px)" }}>
+        <div className="flex h-full flex-col items-center justify-center gap-4 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-6 text-center">
+          <p className="text-xs uppercase tracking-[0.3em] text-cyan-200">Featured Work</p>
+          <p className="text-5xl font-black text-white">{projects.length}</p>
+          <p className="text-sm uppercase tracking-[0.2em] text-slate-300">Projects</p>
+        </div>
+      </div>
+
+      {projects.map((project, index) => (
+        <FloatingProject
+          key={project.title}
+          project={project}
+          index={index}
+          onSelect={setSelectedProject}
+        />
+      ))}
+    </motion.div>
+  </div>
+</section>
+<section id="contact" className="mx-auto max-w-7xl px-6 py-16 pb-24">
+  <div className="grid gap-8 rounded-[2rem] border border-white/10 bg-white/[0.05] p-8 backdrop-blur-xl lg:grid-cols-[0.9fr_1.1fr]">
+    <div>
+      <p className="text-sm font-semibold text-cyan-300">
+        Project Request
+      </p>
+
+      <h2 className="mt-2 text-3xl font-black">
+        Need a website, app, or system?
+      </h2>
+
+      <p className="mt-4 leading-8 text-slate-300">
+        Send your project details here. I can help with portfolio websites,
+        Flutter apps, dashboards, UI improvements, QR scanner apps, PDF scanner
+        apps, and basic web systems.
+      </p>
+
+      <div className="mt-6 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5">
+        <p className="font-semibold text-cyan-200">
+          Email notification enabled
+        </p>
+
+        <p className="mt-2 text-sm leading-6 text-slate-300">
+          When a client submits this form, Formspree will send the project
+          request to your email.
+        </p>
+      </div>
+
+      <div className="mt-6 rounded-2xl border border-white/10 bg-slate-950/70 p-5">
+        <p className="font-semibold text-white">
+          Security features
+        </p>
+
+        <ul className="mt-3 space-y-2 text-sm text-slate-300">
+          <li>• Secure form endpoint through Formspree</li>
+          <li>• Input validation with required fields and length limits</li>
+          <li>• Honeypot field to reduce spam bots</li>
+          <li>• No passwords or API secrets stored in frontend code</li>
+          <li>• Warning for users not to submit private credentials</li>
+          <li>• HTTPS-ready when deployed on Vercel or Netlify</li>
+        </ul>
+      </div>
+    </div>
+
+    <SecureContactForm />
+  </div>
+</section>
+      </main>
+
+      <footer className="relative z-10 border-t border-white/10 px-6 py-6 text-center text-sm text-slate-500">
+        © {currentYear} Syed Developer Space. Portfolio template preview.
+      </footer>
+
+      {selectedProject && (
+        <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
+      )}
+    </div>
+  );
+}
