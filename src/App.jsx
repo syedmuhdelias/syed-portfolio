@@ -187,6 +187,12 @@ export default function ThreeDPortfolioTemplate() {
   function SecureContactForm() {
     const [state, handleSubmit] = useForm("xqejoodz");
     const [step, setStep] = useState(0);
+    const [error, setError] = useState("");
+
+    const isValidEmail = (email) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/;
+      return emailRegex.test(email);
+    };
 
     const [formData, setFormData] = useState({
       name: "",
@@ -252,13 +258,20 @@ export default function ThreeDPortfolioTemplate() {
     const goNext = () => {
       const value = formData[currentStep.field].trim();
 
+      setError("");
+
       if (!value && currentStep.field !== "budget") {
-        alert("Please fill in this field first.");
+        setError("Please fill in this field first.");
+        return;
+      }
+
+      if (currentStep.field === "email" && !isValidEmail(value)) {
+        setError("Please enter a valid email address. Example: name@example.com");
         return;
       }
 
       if (currentStep.field === "message" && value.length < 20) {
-        alert("Project description must be at least 20 characters.");
+        setError("Project description must be at least 20 characters.");
         return;
       }
 
@@ -267,6 +280,40 @@ export default function ThreeDPortfolioTemplate() {
 
     const goBack = () => {
       setStep((prev) => prev - 1);
+    };
+
+    const handleFinalSubmit = (event) => {
+      setError("");
+
+      if (!formData.name.trim()) {
+        event.preventDefault();
+        setStep(0);
+        setError("Please enter your name.");
+        return;
+      }
+
+      if (!isValidEmail(formData.email.trim())) {
+        event.preventDefault();
+        setStep(1);
+        setError("Please enter a valid email address. Example: name@example.com");
+        return;
+      }
+
+      if (!formData.projectType.trim()) {
+        event.preventDefault();
+        setStep(2);
+        setError("Please select a project type.");
+        return;
+      }
+
+      if (!formData.message.trim() || formData.message.trim().length < 20) {
+        event.preventDefault();
+        setStep(4);
+        setError("Please provide a project description with at least 20 characters.");
+        return;
+      }
+
+      handleSubmit(event);
     };
 
     if (state.succeeded) {
@@ -288,7 +335,7 @@ export default function ThreeDPortfolioTemplate() {
     }
 
     return (
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleFinalSubmit} className="space-y-4">
         {/* Hidden fields submitted to Formspree */}
         <input type="hidden" name="name" value={formData.name} />
         <input type="hidden" name="email" value={formData.email} />
@@ -363,9 +410,11 @@ export default function ThreeDPortfolioTemplate() {
               />
             )}
 
-            <p className="mt-4 text-xs text-slate-400">
-              Press Next to continue.
-            </p>
+            {error ? (
+              <p className="mt-4 text-xs text-rose-300">{error}</p>
+            ) : (
+              <p className="mt-4 text-xs text-slate-400">Press Next to continue.</p>
+            )}
           </div>
         </div>
 
