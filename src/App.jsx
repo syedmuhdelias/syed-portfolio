@@ -1,6 +1,10 @@
 import React, { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useForm, ValidationError } from "@formspree/react";
+import LogoLoop from "./components/LogoLoop";
+import Hyperspeed from "./components/Hyperspeed";
+import profileImage from "./assets/syed-profile.png";
+import FadeContent from "./components/FadeContent";
 import {
   Code2,
   Shield,
@@ -12,6 +16,20 @@ import {
   X,
   MousePointerClick,
 } from "lucide-react";
+import {
+  SiReact,
+  SiTailwindcss,
+  SiJavascript,
+  SiFlutter,
+  SiDart,
+  SiFirebase,
+  SiSupabase,
+  SiPostgresql,
+  SiGithub,
+  SiFigma,
+  SiGrafana,
+  SiWireshark,
+} from "react-icons/si";
 
 const Github = Code2;
 const Linkedin = ExternalLink;
@@ -62,19 +80,25 @@ const projects = [
   },
 ];
 
-const skills = [
-  { name: "Flutter", icon: Smartphone },
-  { name: "Dart", icon: Code2 },
-  { name: "React", icon: Code2 },
-  { name: "REST API", icon: Server },
-  { name: "SQL", icon: FileText },
-  { name: "Firebase", icon: Server },
-  { name: "Git", icon: Code2 },
-  { name: "Figma", icon: ExternalLink },
-  { name: "Kali Linux", icon: Shield },
-  { name: "Burp Suite", icon: Shield },
-  { name: "Wireshark", icon: Shield },
-  { name: "Grafana", icon: Server },
+const techLogos = [
+  { node: <SiReact />, title: "React", href: "https://react.dev" },
+  { node: <SiJavascript />, title: "JavaScript" },
+  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
+  { node: <SiFlutter />, title: "Flutter", href: "https://flutter.dev" },
+  { node: <SiDart />, title: "Dart", href: "https://dart.dev" },
+  { node: <SiFirebase />, title: "Firebase", href: "https://firebase.google.com" },
+  { node: <SiSupabase />, title: "Supabase", href: "https://supabase.com" },
+  { node: <SiPostgresql />, title: "PostgreSQL", href: "https://www.postgresql.org" },
+  { node: <SiGithub />, title: "GitHub", href: "https://github.com" },
+  { node: <SiFigma />, title: "Figma", href: "https://figma.com" },
+  { node: <SiGrafana />, title: "Grafana", href: "https://grafana.com" },
+  { node: <SiWireshark />, title: "Wireshark", href: "https://www.wireshark.org" },
+];
+
+const techLogoRows = [
+  techLogos,
+  [...techLogos.slice(4), ...techLogos.slice(0, 4)],
+  [...techLogos.slice(8), ...techLogos.slice(0, 8)],
 ];
 
 function FloatingProject({ project, index, onSelect }) {
@@ -174,8 +198,47 @@ function ProjectModal({ project, onClose }) {
 export default function ThreeDPortfolioTemplate() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
-
+  const [hyperActive, setHyperActive] = useState(false);
   const currentYear = useMemo(() => new Date().getFullYear(), []);
+
+  const hyperspeedOptions = useMemo(
+    () => ({
+      distortion: "turbulentDistortion",
+      length: 400,
+      roadWidth: 10,
+      islandWidth: 2,
+      lanesPerRoad: 4,
+      fov: 90,
+      fovSpeedUp: 150,
+      speedUp: 2,
+      carLightsFade: 0.4,
+      totalSideLightSticks: 20,
+      lightPairsPerRoadWay: 40,
+      shoulderLinesWidthPercentage: 0.05,
+      brokenLinesWidthPercentage: 0.1,
+      brokenLinesLengthPercentage: 0.5,
+      lightStickWidth: [0.12, 0.5],
+      lightStickHeight: [1.3, 1.7],
+      movingAwaySpeed: [60, 80],
+      movingCloserSpeed: [-120, -160],
+      carLightsLength: [12, 80],
+      carLightsRadius: [0.05, 0.14],
+      carWidthPercentage: [0.3, 0.5],
+      carShiftX: [-0.8, 0.8],
+      carFloorSeparation: [0, 5],
+      colors: {
+        roadColor: 0x080808,
+        islandColor: 0x0a0a0a,
+        background: 0x000000,
+        shoulderLines: 0xffffff,
+        brokenLines: 0xffffff,
+        leftCars: [0xd856bf, 0x6750a2, 0xc247ac],
+        rightCars: [0x03b3c3, 0x0e5ea5, 0x324555],
+        sticks: 0x03b3c3,
+      },
+    }),
+    []
+  );
 
   const handleMouseMove = (event) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -485,43 +548,84 @@ export default function ThreeDPortfolioTemplate() {
         </nav>
       </header>
       <main className="relative z-10">
-        <section className="mx-auto min-h-[calc(100vh-92px)] max-w-7xl px-6 py-10">
-          <div className="relative z-10">
-           
+        <section className="relative overflow-hidden">
+          {/* Hyperspeed background */}
+          <div className="absolute inset-0 pointer-events-none opacity-90">
+            <Hyperspeed effectOptions={hyperspeedOptions} isActive={hyperActive} />
+          </div>
 
-            <motion.h2
-              className="max-w-2xl text-5xl font-black leading-tight md:text-7xl"
+          {/* Light overlay only, so animation is still visible */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#050816]/95 via-[#050816]/60 to-[#050816]/20" />
+
+          <div className="relative mx-auto flex min-h-[calc(100vh-92px)] flex-col gap-10 px-6 py-10 lg:flex-row lg:items-center lg:justify-between">
+            {/* Left text */}
+            <motion.div
+              className="max-w-2xl space-y-8 text-white"
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
             >
-              Building secure apps with interactive digital experiences.
-            </motion.h2>
+              <motion.h1
+                className="text-5xl font-black leading-tight md:text-7xl"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+              >
+                Hi, I&apos;m Syed
+              </motion.h1>
 
-            <motion.p
-              className="mt-6 max-w-xl text-lg leading-8 text-slate-300"
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              A portfolio concept for showcasing Flutter projects, cybersecurity skills, FYP work, and infrastructure monitoring experience in a 3D-style workspace.
-            </motion.p>
+              <motion.p
+                className="max-w-xl text-lg leading-8 text-slate-300"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                A portfolio concept for showcasing Flutter projects, cybersecurity skills,
+                FYP work, and infrastructure monitoring experience in a 3D-style
+                workspace.
+              </motion.p>
 
-            <motion.div
-              className="mt-8 flex flex-wrap gap-3"
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              <a href="#projects" className="rounded-2xl bg-white px-5 py-3 font-bold text-slate-950 shadow-lg hover:bg-slate-200">
-                View Projects
-              </a>
-              <a href="#contact" className="rounded-2xl border border-white/15 px-5 py-3 font-bold text-white hover:bg-white/10">
-                Contact Me
-              </a>
+              <motion.div
+                className="flex flex-wrap gap-3"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <button
+                  type="button"
+                  onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                  onPointerDown={() => setHyperActive(true)}
+                  onPointerUp={() => setHyperActive(false)}
+                  onPointerLeave={() => setHyperActive(false)}
+                  onTouchEnd={() => setHyperActive(false)}
+                  className="rounded-2xl bg-white px-5 py-3 font-bold text-slate-950 shadow-lg transition hover:bg-slate-200 active:scale-95"
+                >
+                  View Projects
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                  onPointerDown={() => setHyperActive(true)}
+                  onPointerUp={() => setHyperActive(false)}
+                  onPointerLeave={() => setHyperActive(false)}
+                  onTouchEnd={() => setHyperActive(false)}
+                  className="rounded-2xl border border-white/15 px-5 py-3 font-bold text-white transition hover:bg-white/10 active:scale-95"
+                >
+                  Contact Me
+                </button>
+              </motion.div>
             </motion.div>
-          </div>
 
+            {/* Right image */}
+            <FadeContent className="hidden lg:flex">
+              <img
+                src={profileImage}
+                alt="Syed profile"
+                className="max-h-[calc(100vh-170px)] object-contain"
+              />
+            </FadeContent>
+          </div>
         </section>
 
         <section id="about" className="mx-auto max-w-7xl px-6 py-16">
@@ -544,38 +648,62 @@ export default function ThreeDPortfolioTemplate() {
         </section>
 
 <section id="skills" className="mx-auto max-w-7xl px-6 py-16">
-  <p className="text-sm font-semibold text-cyan-300">Skills</p>
-  <h2 className="mt-2 text-3xl font-black">Tech stack and tools</h2>
+  <p className="text-sm font-semibold text-cyan-300">Code Knowledge</p>
 
-  <div className="relative mt-8 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] py-5">
-    <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-24 bg-gradient-to-r from-[#050816] to-transparent" />
-    <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-24 bg-gradient-to-l from-[#050816] to-transparent" />
+  <h2 className="mt-2 text-3xl font-black">
+    Technologies I work with
+  </h2>
 
-    <motion.div
-      className="flex w-max gap-4"
-      animate={{ x: ["0%", "-50%"] }}
-      transition={{
-        duration: 45,
-        repeat: Infinity,
-        ease: "linear",
-      }}
-    >
-      {[...skills, ...skills].map((skill, index) => {
-        const Icon = skill.icon;
+  <p className="mt-4 max-w-4xl leading-8 text-slate-300">
+    A quick view of the tools, frameworks, and platforms I use for software
+    development, mobile apps, cybersecurity, and infrastructure monitoring.
+  </p>
 
-        return (
-          <div
-            key={`${skill.name}-${index}`}
-            className="flex min-w-[170px] items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/70 px-5 py-4 text-slate-200 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-cyan-300/10 hover:text-white"
-          >
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-300">
-              <Icon className="h-5 w-5" />
-            </div>
-            <span className="font-semibold">{skill.name}</span>
-          </div>
-        );
-      })}
-    </motion.div>
+<div className="relative mt-8 overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.04] p-6  shadow-2xl shadow-cyan-500/5 backdrop-blur-xl">
+    <div className="h-[70px]">
+      <LogoLoop
+        logos={techLogoRows[0]}
+        speed={45}
+        direction="right"
+        logoHeight={34}
+        gap={60}
+        hoverSpeed={10}
+        scaleOnHover
+        fadeOut
+        fadeOutColor="#020617"
+        ariaLabel="Technology stack row one"
+      />
+    </div>
+
+    <div className="h-[70px]">
+      <LogoLoop
+        logos={techLogoRows[1]}
+        speed={45}
+        direction="left"
+        logoHeight={34}
+        gap={60}
+        hoverSpeed={10}
+        scaleOnHover
+        fadeOut
+        fadeOutColor="#020617"
+        ariaLabel="Technology stack row two"
+      />
+    </div>
+
+    <div className="h-[70px]">
+      <LogoLoop
+        logos={techLogoRows[2]}
+        speed={45}
+        direction="right"
+        logoHeight={34}
+        gap={60}
+        hoverSpeed={10}
+        scaleOnHover
+        fadeOut
+        fadeOutColor="#020617"
+        ariaLabel="Technology stack row three"
+      />
+    </div>
   </div>
 </section>
 <section id="projects" className="mx-auto max-w-7xl px-6 py-16" onMouseMove={handleMouseMove}>
