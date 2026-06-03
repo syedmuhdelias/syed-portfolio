@@ -197,6 +197,7 @@ function ProjectModal({ project, onClose }) {
 
 export default function ThreeDPortfolioTemplate() {
   const [selectedProject, setSelectedProject] = useState(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [hyperActive, setHyperActive] = useState(false);
   const currentYear = useMemo(() => new Date().getFullYear(), []);
@@ -532,9 +533,21 @@ export default function ThreeDPortfolioTemplate() {
 
       <header className="relative z-40 mx-auto mt-5 flex w-[95%] max-w-7xl items-center justify-between rounded-3xl border border-white/10 bg-slate-950/60 px-6 py-4 backdrop-blur-xl">
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-slate-950 shadow-lg">
-            S
-          </div>
+          <button
+            type="button"
+            onClick={() => setIsProfileOpen((prev) => !prev)}
+            onContextMenu={(event) => event.preventDefault()}
+            onDragStart={(event) => event.preventDefault()}
+            className="relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-cyan-400/60"
+            aria-label="Syed profile icon"
+          >
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${profileImage})` }}
+              aria-hidden="true"
+            />
+            <span className="sr-only">Syed Developer Space profile picture</span>
+          </button>
           <div>
             <h1 className="font-bold tracking-wide">Syed Developer Space</h1>
           </div>
@@ -546,6 +559,18 @@ export default function ThreeDPortfolioTemplate() {
           <a href="#skills" className=" rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Skills</a>
           <a href="#contact" className="rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Contact</a>
         </nav>
+
+        {isProfileOpen && (
+          <div className="absolute left-6 top-full mt-3 w-72 rounded-3xl border border-white/10 bg-slate-950/95 p-4 text-slate-200 shadow-2xl backdrop-blur-xl">
+            <p className="font-medium text-white">Hello, I’m Syed.</p>
+            <p className="mt-2 text-sm leading-6 text-slate-300">
+              Cybersecurity-aware developer focused on Flutter apps, secure dashboards, and monitoring systems.
+            </p>
+            <p className="mt-3 text-xs uppercase tracking-[0.2em] text-cyan-300">
+              Click the profile to hide.
+            </p>
+          </div>
+        )}
       </header>
       <main className="relative z-10">
         <section className="relative overflow-hidden">
@@ -617,14 +642,6 @@ export default function ThreeDPortfolioTemplate() {
               </motion.div>
             </motion.div>
 
-            {/* Right image */}
-            <FadeContent className="hidden lg:flex">
-              <img
-                src={profileImage}
-                alt="Syed profile"
-                className="max-h-[calc(100vh-170px)] object-contain"
-              />
-            </FadeContent>
           </div>
         </section>
 
