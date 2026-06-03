@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useForm, ValidationError } from "@formspree/react";
 import LogoLoop from "./components/LogoLoop";
@@ -14,6 +14,7 @@ import {
   Mail,
   ExternalLink,
   X,
+  Menu,
   MousePointerClick,
 } from "lucide-react";
 import {
@@ -198,9 +199,18 @@ function ProjectModal({ project, onClose }) {
 export default function ThreeDPortfolioTemplate() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [isMobileScreen, setIsMobileScreen] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [hyperActive, setHyperActive] = useState(false);
   const currentYear = useMemo(() => new Date().getFullYear(), []);
+
+  useEffect(() => {
+    const updateIsMobile = () => setIsMobileScreen(window.innerWidth < 768);
+    updateIsMobile();
+    window.addEventListener("resize", updateIsMobile);
+    return () => window.removeEventListener("resize", updateIsMobile);
+  }, []);
 
   const hyperspeedOptions = useMemo(
     () => ({
@@ -553,22 +563,43 @@ export default function ThreeDPortfolioTemplate() {
           </div>
         </div>
 
-        <nav className="hidden items-center gap-2 text-sm backdrop-blur-xl md:flex">
-          <a href="#about" className="rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">About</a>
-          <a href="#projects" className="rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Projects</a>
-          <a href="#skills" className=" rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Skills</a>
-          <a href="#contact" className="rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Contact</a>
-        </nav>
+        <div className="flex items-center gap-2">
+          <nav className="hidden items-center gap-2 text-sm backdrop-blur-xl md:flex">
+            <a href="#about" className="rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">About</a>
+            <a href="#projects" className="rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Projects</a>
+            <a href="#skills" className=" rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Skills</a>
+            <a href="#contact" className="rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Contact</a>
+          </nav>
 
-        {isProfileOpen && (
-          <div className="absolute left-6 top-full mt-3 w-72 rounded-3xl border border-white/10 bg-slate-950/95 p-4 text-slate-200 shadow-2xl backdrop-blur-xl">
-            <p className="font-medium text-white">Hello, I’m Syed.</p>
-            <p className="mt-2 text-sm leading-6 text-slate-300">
-              Cybersecurity-aware developer focused on Flutter apps, secure dashboards, and monitoring systems.
-            </p>
-            <p className="mt-3 text-xs uppercase tracking-[0.2em] text-cyan-300">
-              Click the profile to hide.
-            </p>
+          <button
+            type="button"
+            onClick={() => setMobileNavOpen((prev) => !prev)}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-slate-900 text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl md:hidden"
+            aria-label="Toggle navigation menu"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+        </div>
+
+        {mobileNavOpen && (
+          <div className="absolute inset-x-6 top-full z-50 mt-3 rounded-3xl border border-white/10 bg-slate-950/95 p-4 shadow-2xl backdrop-blur-xl md:hidden">
+            <div className="flex flex-col gap-3">
+              {[
+                { id: "about", label: "About" },
+                { id: "projects", label: "Projects" },
+                { id: "skills", label: "Skills" },
+                { id: "contact", label: "Contact" },
+              ].map((item) => (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  onClick={() => setMobileNavOpen(false)}
+                  className="rounded-2xl px-4 py-3 text-sm transition hover:bg-white/10 hover:text-white"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </div>
           </div>
         )}
       </header>
@@ -727,30 +758,53 @@ export default function ThreeDPortfolioTemplate() {
   <p className="text-sm font-semibold text-cyan-300">Projects</p>
   <h2 className="mt-2 text-3xl font-black">Featured projects</h2>
 
-  <div className="relative mt-8 h-[560px] min-h-[520px] perspective-[1200px]">
-    <motion.div
-      className="absolute inset-0 rounded-[3rem] border border-white/10 bg-white/[0.04] shadow-2xl backdrop-blur-sm"
-      animate={{ rotateX: tilt.y, rotateY: tilt.x }}
-      transition={{ type: "spring", stiffness: 90, damping: 18 }}
-      style={{ transformStyle: "preserve-3d" }}
-    >
-      <div className="absolute left-1/2 top-1/2 h-72 w-96 -translate-x-1/2 -translate-y-1/2 rounded-[2rem] border border-white/15 bg-slate-900/90 p-5 shadow-2xl" style={{ transform: "translateZ(80px)" }}>
-        <div className="flex h-full flex-col items-center justify-center gap-4 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-6 text-center">
-          <p className="text-xs uppercase tracking-[0.3em] text-cyan-200">Featured Work</p>
-          <p className="text-5xl font-black text-white">{projects.length}</p>
-          <p className="text-sm uppercase tracking-[0.2em] text-slate-300">Projects</p>
-        </div>
+  <div className={`relative mt-8 ${isMobileScreen ? "" : "h-[560px] min-h-[520px] perspective-[1200px]"}`}>
+    {isMobileScreen ? (
+      <div className="grid gap-4 rounded-[2rem] border border-white/10 bg-white/[0.04] p-4 shadow-2xl backdrop-blur-sm">
+        {projects.map((project) => {
+          const Icon = project.icon;
+          return (
+            <button
+              key={project.title}
+              type="button"
+              onClick={() => setSelectedProject(project)}
+              className="group w-full rounded-3xl border border-white/15 bg-white/10 p-4 text-left shadow-2xl backdrop-blur-xl transition hover:border-white/35"
+            >
+              <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${project.color} shadow-lg`}>
+                <Icon className="h-5 w-5 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-white">{project.title}</h3>
+              <p className="mt-1 text-sm text-slate-300">{project.type}</p>
+              <p className="mt-3 text-sm leading-6 text-slate-300">{project.description}</p>
+            </button>
+          );
+        })}
       </div>
+    ) : (
+      <motion.div
+        className="absolute inset-0 rounded-[3rem] border border-white/10 bg-white/[0.04] shadow-2xl backdrop-blur-sm"
+        animate={{ rotateX: tilt.y, rotateY: tilt.x }}
+        transition={{ type: "spring", stiffness: 90, damping: 18 }}
+        style={{ transformStyle: "preserve-3d" }}
+      >
+        <div className="absolute left-1/2 top-1/2 h-72 w-96 -translate-x-1/2 -translate-y-1/2 rounded-[2rem] border border-white/15 bg-slate-900/90 p-5 shadow-2xl" style={{ transform: "translateZ(80px)" }}>
+          <div className="flex h-full flex-col items-center justify-center gap-4 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-6 text-center">
+            <p className="text-xs uppercase tracking-[0.3em] text-cyan-200">Featured Work</p>
+            <p className="text-5xl font-black text-white">{projects.length}</p>
+            <p className="text-sm uppercase tracking-[0.2em] text-slate-300">Projects</p>
+          </div>
+        </div>
 
-      {projects.map((project, index) => (
-        <FloatingProject
-          key={project.title}
-          project={project}
-          index={index}
-          onSelect={setSelectedProject}
-        />
-      ))}
-    </motion.div>
+        {projects.map((project, index) => (
+          <FloatingProject
+            key={project.title}
+            project={project}
+            index={index}
+            onSelect={setSelectedProject}
+          />
+        ))}
+      </motion.div>
+    )}
   </div>
 </section>
 <section id="contact" className="mx-auto max-w-7xl px-6 py-16 pb-24">
