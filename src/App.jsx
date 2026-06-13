@@ -1,99 +1,176 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useForm, ValidationError } from "@formspree/react";
+import { useForm } from "@formspree/react";
 import LogoLoop from "./components/LogoLoop";
 import Hyperspeed from "./components/Hyperspeed";
-import profileImage from "./assets/syed-profile.png";
-import FadeContent from "./components/FadeContent";
 import {
   Code2,
   Shield,
-  Smartphone,
   Server,
-  FileText,
-  Mail,
   ExternalLink,
   X,
   Menu,
   MousePointerClick,
+  Bot,
+  Package,
+  Activity,
+  Bus,
+  GraduationCap,
+  Briefcase,
+  MapPin,
+  Phone,
+  Mail,
 } from "lucide-react";
 import {
-  SiReact,
-  SiTailwindcss,
-  SiJavascript,
-  SiFlutter,
-  SiDart,
-  SiFirebase,
   SiSupabase,
   SiPostgresql,
   SiGithub,
-  SiFigma,
   SiGrafana,
   SiWireshark,
+  SiDocker,
+  SiPrometheus,
+  SiPython,
+  SiLinux,
+  SiUbuntu,
+  SiMysql,
 } from "react-icons/si";
 
-const Github = Code2;
-const Linkedin = ExternalLink;
-const projects = [
+const CONTACT = {
+  name: "Syed Muhammad Elias Bin Syed Ahamed",
+  shortName: "Syed Muhammad Elias",
+  title: "Cybersecurity Graduate | Junior SOC / Infrastructure",
+  location: "Jitra, Kedah, Malaysia",
+  phone: "+60 11 1097 7098",
+  email: "jahabarnishasyed@gmail.com",
+  linkedin: "https://linkedin.com/in/syed-muhammad-elias-bin-syed-ahamed-52631a171",
+};
+
+const experience = [
   {
-    title: "BoraScan",
-    type: "Flutter PDF Scanner App",
-    description:
-      "Offline Android-first scanner app that converts images into clean PDF documents with filters, preview, and secure local storage.",
-    tech: ["Flutter", "Dart", "PDF", "Local Storage"],
-    icon: FileText,
-    left: "4%",
-    top: "64%",
-    color: "from-cyan-400 to-blue-600",
+    company: "Aafiyat Marketing SDN.BHD",
+    role: "Intern Infra",
+    period: "August 2025 – February 2026",
+    highlights: [
+      "Configured solutions to resolve server downtime and crash issues while maintaining KPI targets.",
+      "Led project coordination with documentation templates and timeline tracking, achieving 50–70% project completion.",
+      "Developed technical support guidelines that reduced intern onboarding from one week to 3–5 days.",
+      "Built a smart attendance system using Cursor AI and Supabase, later presented at university.",
+      "Led a network project enabling roaming and RSSI to resolve sticky client issues, improving WiFi uptime by ~70%.",
+      "Monitored network and server uptime daily using Grafana dashboards for KPI reporting.",
+    ],
   },
   {
-    title: "SMART MES",
-    type: "Parcel QR Scanning App",
+    company: "Albukhary International University — Corporate Communications Unit",
+    role: "Office Assistant",
+    period: "August 2024 – May 2025",
+    highlights: [
+      "Conducted outbound calls to prospective applicants with an 85% success rate in securing leads.",
+      "Maintained accurate customer interaction records in Microsoft Excel for operational efficiency.",
+      "Supported campus initiatives and visitor events with logistical coordination for executives.",
+    ],
+  },
+  {
+    company: "PERKESO",
+    role: "Office Assistant",
+    period: "November 2021 – April 2022",
+    highlights: [
+      "Completed weekly reports using Excel, Word, and PowerPoint in a full-time placement environment.",
+      "Completed 60 hours of PERKESO-approved training, improving personal task completion efficiency by 20%.",
+      "Built teamwork and interpersonal skills while meeting employer standards in a real work setting.",
+    ],
+  },
+];
+
+const education = [
+  {
+    school: "Albukhary International University",
+    degree: "Bachelor of Computer Science (Cybersecurity)",
+    period: "October 2022 – April 2026",
+    detail: "CGPA 3.48 / 4.00",
+    notes:
+      "Coursework includes Computer Organization and Architecture, Artificial Intelligence, Data Communication and Networking, Problem Solving and Programming, and Vulnerability Assessment and Penetration Testing.",
+  },
+  {
+    school: "Politeknik Sultan Abdul Halim Muadzam Shah",
+    degree: "Diploma in Electronic Communication",
+    period: "June 2018 – December 2020",
+    detail: "Diploma completed",
+    notes:
+      "Built a technical foundation in electronics, communication systems, and digital technology through lab work and projects.",
+  },
+];
+
+const projects = [
+  {
+    title: "Smart Attendance System",
+    type: "Full-Stack Attendance Platform",
     description:
-      "Delivery verification app with parcel QR scanning, item status tracking, REST API integration, and proof image upload.",
-    tech: ["Flutter", "REST API", "QR Scanner", "MockAPI"],
-    icon: Smartphone,
-    left: "28%",
-    top: "64%",
+      "Designed and implemented a Smart Attendance Management System using Supabase (PostgreSQL) for backend management and AI-assisted development tools (Cursor AI) to automate attendance recording and reporting.",
+    tech: ["Supabase", "PostgreSQL", "Cursor AI", "Automation"],
+    icon: Server,
+    left: "2%",
+    top: "58%",
+    color: "from-orange-400 to-red-600",
+  },
+  {
+    title: "Smart Parcel Box",
+    type: "IoT Secure Delivery System",
+    description:
+      "IoT-based smart box using ESP8266 with email notifications on access — ideal for secure school use such as assignment submissions or document exchange. Improves parcel security and reduces physical contact.",
+    tech: ["ESP8266", "IoT", "Email Alerts", "Security"],
+    icon: Package,
+    left: "20%",
+    top: "68%",
     color: "from-violet-400 to-purple-700",
   },
   {
-    title: "IOT system",
-    type: "earth detector detector",
+    title: "Earthquake Detector",
+    type: "IoT Vibration Monitoring",
     description:
-      "IoT-based prototype to detect ground vibration and send real-time earthquake alerts.",
-    tech: [ "Dashboard", "Database", "Reports"],
-    icon: Code2,
-    left: "52%",
-    top: "64%",
+      "Developed an IoT-based system to detect ground vibrations and send real-time earthquake alerts for early awareness and monitoring.",
+    tech: ["IoT", "Sensors", "Real-time Alerts", "Embedded"],
+    icon: Activity,
+    left: "38%",
+    top: "58%",
     color: "from-emerald-400 to-green-700",
   },
   {
-    title: "Smart Attendance Management System",
-    type: "IOT based notify system",
+    title: "AI Voice Assistant",
+    type: "Python Chatbot",
     description:
-      "Server monitoring dashboard using Grafana, Prometheus, Windows Exporter, and visual threshold panels.",
-    tech: ["Grafana", "Prometheus", "Monitoring", "Exporter"],
-    icon: Server,
-    left: "76%",
-    top: "64%",
-    color: "from-orange-400 to-red-600",
+      "Built a Python-based chatbot to automate responses and streamline communication for a student organization.",
+    tech: ["Python", "Chatbot", "Automation", "NLP"],
+    icon: Bot,
+    left: "56%",
+    top: "68%",
+    color: "from-cyan-400 to-blue-600",
+  },
+  {
+    title: "Bus Booking System",
+    type: "C-Based Ticket Management",
+    description:
+      "Developed a C-based program to manage ticket bookings, reducing manual errors and enhancing usability.",
+    tech: ["C", "CLI", "Booking Logic", "Data Management"],
+    icon: Bus,
+    left: "74%",
+    top: "58%",
+    color: "from-amber-400 to-orange-600",
   },
 ];
 
 const techLogos = [
-  { node: <SiReact />, title: "React", href: "https://react.dev" },
-  { node: <SiJavascript />, title: "JavaScript" },
-  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
-  { node: <SiFlutter />, title: "Flutter", href: "https://flutter.dev" },
-  { node: <SiDart />, title: "Dart", href: "https://dart.dev" },
-  { node: <SiFirebase />, title: "Firebase", href: "https://firebase.google.com" },
+  { node: <SiWireshark />, title: "Wireshark", href: "https://www.wireshark.org" },
+  { node: <SiGrafana />, title: "Grafana", href: "https://grafana.com" },
+  { node: <SiPrometheus />, title: "Prometheus", href: "https://prometheus.io" },
+  { node: <SiDocker />, title: "Docker", href: "https://www.docker.com" },
+  { node: <SiLinux />, title: "Linux", href: "https://www.linux.org" },
+  { node: <SiUbuntu />, title: "Ubuntu Server", href: "https://ubuntu.com/server" },
   { node: <SiSupabase />, title: "Supabase", href: "https://supabase.com" },
   { node: <SiPostgresql />, title: "PostgreSQL", href: "https://www.postgresql.org" },
+  { node: <SiMysql />, title: "MySQL", href: "https://www.mysql.com" },
+  { node: <SiPython />, title: "Python", href: "https://www.python.org" },
   { node: <SiGithub />, title: "GitHub", href: "https://github.com" },
-  { node: <SiFigma />, title: "Figma", href: "https://figma.com" },
-  { node: <SiGrafana />, title: "Grafana", href: "https://grafana.com" },
-  { node: <SiWireshark />, title: "Wireshark", href: "https://www.wireshark.org" },
+  { node: <Shield className="h-[34px] w-[34px]" />, title: "Burp Suite" },
 ];
 
 const techLogoRows = [
@@ -198,7 +275,6 @@ function ProjectModal({ project, onClose }) {
 
 export default function ThreeDPortfolioTemplate() {
   const [selectedProject, setSelectedProject] = useState(null);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [isMobileScreen, setIsMobileScreen] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
@@ -290,17 +366,16 @@ export default function ThreeDPortfolioTemplate() {
         placeholder: "Enter your email",
       },
       {
-        title: "What type of project do you need?",
+        title: "What is this inquiry about?",
         field: "projectType",
         type: "select",
-        placeholder: "Select project type",
+        placeholder: "Select inquiry type",
         options: [
-          "Portfolio Website",
-          "Flutter Mobile App",
-          "Web System",
-          "Dashboard",
-          "UI Improvement",
-          "Cybersecurity Consultation",
+          "Job / Internship Opportunity",
+          "SOC / Security Collaboration",
+          "Infrastructure Support",
+          "Project Collaboration",
+          "Technical Consultation",
           "Other",
         ],
       },
@@ -311,11 +386,11 @@ export default function ThreeDPortfolioTemplate() {
         placeholder: "Example: RM200 - RM500",
       },
       {
-        title: "Tell me about your project",
+        title: "What would you like to discuss?",
         field: "message",
         type: "textarea",
         placeholder:
-          "Describe your project idea, features, deadline, and any reference website/app.",
+          "Share details about the role, collaboration, or opportunity you'd like to discuss.",
       },
     ];
 
@@ -398,7 +473,7 @@ export default function ThreeDPortfolioTemplate() {
           </p>
 
           <p className="mt-2 text-slate-300">
-            Thank you. I received your project request and will reply through email.
+            Thank you. I received your message and will reply through email.
           </p>
 
           <p className="mt-2 text-xs text-slate-400">
@@ -525,7 +600,7 @@ export default function ThreeDPortfolioTemplate() {
               disabled={state.submitting}
               className="flex-1 rounded-2xl bg-cyan-300 px-5 py-3 font-bold text-slate-950 transition-all duration-300 hover:-translate-y-1 hover:bg-cyan-200 hover:shadow-xl hover:shadow-cyan-500/20 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {state.submitting ? "Sending..." : "Send Secure Project Request"}
+              {state.submitting ? "Sending..." : "Send Message"}
             </button>
           )}
         </div>
@@ -543,31 +618,22 @@ export default function ThreeDPortfolioTemplate() {
 
       <header className="relative z-40 mx-auto mt-5 flex w-[95%] max-w-7xl items-center justify-between rounded-3xl border border-white/10 bg-slate-950/60 px-6 py-4 backdrop-blur-xl">
         <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setIsProfileOpen((prev) => !prev)}
-            onContextMenu={(event) => event.preventDefault()}
-            onDragStart={(event) => event.preventDefault()}
-            className="relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-cyan-400/60"
-            aria-label="Syed profile icon"
-          >
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${profileImage})` }}
-              aria-hidden="true"
-            />
-            <span className="sr-only">Syed Developer Space profile picture</span>
-          </button>
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-cyan-500 to-blue-700 shadow-lg">
+            <Shield className="h-5 w-5 text-white" />
+          </div>
           <div>
-            <h1 className="font-bold tracking-wide">Syed Developer Space</h1>
+            <h1 className="font-bold tracking-wide">{CONTACT.shortName}</h1>
+            <p className="text-xs text-slate-400">{CONTACT.title}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           <nav className="hidden items-center gap-2 text-sm backdrop-blur-xl md:flex">
             <a href="#about" className="rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">About</a>
+            <a href="#experience" className="rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Experience</a>
             <a href="#projects" className="rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Projects</a>
             <a href="#skills" className=" rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Skills</a>
+            <a href="#education" className="rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Education</a>
             <a href="#contact" className="rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 hover:text-white hover:shadow-lg">Contact</a>
           </nav>
 
@@ -586,8 +652,10 @@ export default function ThreeDPortfolioTemplate() {
             <div className="flex flex-col gap-3">
               {[
                 { id: "about", label: "About" },
+                { id: "experience", label: "Experience" },
                 { id: "projects", label: "Projects" },
                 { id: "skills", label: "Skills" },
+                { id: "education", label: "Education" },
                 { id: "contact", label: "Contact" },
               ].map((item) => (
                 <a
@@ -631,15 +699,42 @@ export default function ThreeDPortfolioTemplate() {
               </motion.h1>
 
               <motion.p
+                className="text-xl font-semibold text-cyan-300"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.18 }}
+              >
+                {CONTACT.title}
+              </motion.p>
+
+              <motion.p
                 className="max-w-xl text-lg leading-8 text-slate-300"
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                A portfolio concept for showcasing Flutter projects, cybersecurity skills,
-                FYP work, and infrastructure monitoring experience in a 3D-style
-                workspace.
+                Recent Bachelor of Computer Science (Cybersecurity) graduate with hands-on
+                experience in infrastructure monitoring, network troubleshooting, and secure
+                system support. Eager to build a career in Security Operations, threat
+                monitoring, and incident response.
               </motion.p>
+
+              <motion.div
+                className="flex flex-wrap gap-4 text-sm text-slate-300"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                <span className="inline-flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-cyan-300" /> {CONTACT.location}
+                </span>
+                <a href={`tel:${CONTACT.phone.replace(/\s/g, "")}`} className="inline-flex items-center gap-2 transition hover:text-white">
+                  <Phone className="h-4 w-4 text-cyan-300" /> {CONTACT.phone}
+                </a>
+                <a href={`mailto:${CONTACT.email}`} className="inline-flex items-center gap-2 transition hover:text-white">
+                  <Mail className="h-4 w-4 text-cyan-300" /> {CONTACT.email}
+                </a>
+              </motion.div>
 
               <motion.div
                 className="flex flex-wrap gap-3"
@@ -668,8 +763,17 @@ export default function ThreeDPortfolioTemplate() {
                   onTouchEnd={() => setHyperActive(false)}
                   className="rounded-2xl border border-white/15 px-5 py-3 font-bold text-white transition hover:bg-white/10 active:scale-95"
                 >
-                  Contact Me
+                  Get In Touch
                 </button>
+
+                <a
+                  href={CONTACT.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-cyan-300/30 px-5 py-3 font-bold text-cyan-200 transition hover:bg-cyan-300/10 active:scale-95"
+                >
+                  <ExternalLink className="h-4 w-4" /> LinkedIn
+                </a>
               </motion.div>
             </motion.div>
 
@@ -680,32 +784,104 @@ export default function ThreeDPortfolioTemplate() {
           <div className="grid gap-6 lg:grid-cols-3">
             <div className="rounded-[2rem] border border-white/10 bg-white/[0.05] p-6 backdrop-blur-xl lg:col-span-2">
               <p className="text-sm font-semibold text-cyan-300">About Me</p>
-              <h2 className="mt-2 text-3xl font-black">Security-aware developer focused on practical apps.</h2>
+              <h2 className="mt-2 text-3xl font-black">Cybersecurity graduate focused on SOC and infrastructure.</h2>
               <p className="mt-4 leading-8 text-slate-300">
-                I am a Computer Science student majoring in Cybersecurity. My work focuses on Flutter app development, REST API integration, secure app design, and monitoring systems using tools like Grafana and Prometheus.
+                I am a recent Bachelor of Computer Science (Cybersecurity) graduate with practical
+                experience in infrastructure monitoring, network troubleshooting, and secure system
+                support. I am familiar with tools including Wireshark, Burp Suite, Kali Linux,
+                Nessus, Grafana, Prometheus, and Docker.
+              </p>
+              <p className="mt-4 leading-8 text-slate-300">
+                I support resilient IT environments through proactive monitoring, technical
+                troubleshooting, and clear documentation. Analytical, adaptable, and actively
+                developing skills as a CTF player with a strong interest in threat monitoring and
+                incident response.
               </p>
             </div>
             <div className="rounded-[2rem] border border-white/10 bg-white/[0.05] p-6 backdrop-blur-xl">
               <Shield className="h-9 w-9 text-cyan-300" />
-              <h3 className="mt-4 text-xl font-bold">Portfolio Angle</h3>
-              <p className="mt-3 leading-7 text-slate-300">
-                Show that you are not just a coder, but a developer who understands security, monitoring, and real-world systems.
+              <h3 className="mt-4 text-xl font-bold">Core Focus</h3>
+              <ul className="mt-3 space-y-2 text-sm leading-7 text-slate-300">
+                <li>• Security Operations &amp; threat monitoring</li>
+                <li>• Infrastructure &amp; server monitoring</li>
+                <li>• Network troubleshooting &amp; documentation</li>
+                <li>• Incident detection &amp; basic response</li>
+                <li>• Secure software development principles</li>
+              </ul>
+              <p className="mt-4 text-sm text-slate-400">
+                Languages: Malay, English, Tamil
               </p>
             </div>
           </div>
         </section>
 
+        <section id="experience" className="mx-auto max-w-7xl px-6 py-16">
+          <p className="text-sm font-semibold text-cyan-300">Professional Experience</p>
+          <h2 className="mt-2 text-3xl font-black">Where I&apos;ve worked</h2>
+          <p className="mt-4 max-w-4xl leading-8 text-slate-300">
+            Hands-on roles spanning infrastructure support, network operations, technical
+            documentation, and office administration.
+          </p>
+
+          <div className="mt-8 space-y-6">
+            {experience.map((job) => (
+              <div
+                key={`${job.company}-${job.period}`}
+                className="rounded-[2rem] border border-white/10 bg-white/[0.05] p-6 backdrop-blur-xl"
+              >
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-300">
+                      <Briefcase className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white">{job.role}</h3>
+                      <p className="mt-1 text-cyan-200">{job.company}</p>
+                    </div>
+                  </div>
+                  <span className="rounded-full border border-white/10 bg-slate-950/70 px-4 py-1 text-sm text-slate-300">
+                    {job.period}
+                  </span>
+                </div>
+                <ul className="mt-5 space-y-2 pl-4 text-sm leading-7 text-slate-300">
+                  {job.highlights.map((item) => (
+                    <li key={item} className="list-disc">{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+
 <section id="skills" className="mx-auto max-w-7xl px-6 py-16">
-  <p className="text-sm font-semibold text-cyan-300">Code Knowledge</p>
+  <p className="text-sm font-semibold text-cyan-300">Technical Skills</p>
 
   <h2 className="mt-2 text-3xl font-black">
-    Technologies I work with
+    Tools &amp; platforms I use
   </h2>
 
   <p className="mt-4 max-w-4xl leading-8 text-slate-300">
-    A quick view of the tools, frameworks, and platforms I use for software
-    development, mobile apps, cybersecurity, and infrastructure monitoring.
+    Security, networking, monitoring, and development tools from coursework, internships,
+    and hands-on projects — including Metasploit, Nmap, OWASP ZAP, Burp Suite, Kali Linux,
+    Grafana, Prometheus, Docker, Ghidra, and Taiga.
   </p>
+
+  <div className="mt-8 grid gap-4 md:grid-cols-2">
+    <div className="rounded-[2rem] border border-white/10 bg-white/[0.05] p-6 backdrop-blur-xl">
+      <h3 className="text-lg font-bold text-white">Cybersecurity &amp; Infrastructure</h3>
+      <p className="mt-3 text-sm leading-7 text-slate-300">
+        Network security, infrastructure monitoring, digital forensics basics, Linux security,
+        incident detection, IT support troubleshooting, and technical documentation.
+      </p>
+    </div>
+    <div className="rounded-[2rem] border border-white/10 bg-white/[0.05] p-6 backdrop-blur-xl">
+      <h3 className="text-lg font-bold text-white">Soft Skills</h3>
+      <p className="mt-3 text-sm leading-7 text-slate-300">
+        Problem-solving, critical thinking, ethical mindset, adaptability, teamwork, time
+        management, attention to detail, analytical thinking, communication, and CTF participation.
+      </p>
+    </div>
+  </div>
 
 <div className="relative mt-8 overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.04] p-6  shadow-2xl shadow-cyan-500/5 backdrop-blur-xl">
     <div className="h-[70px]">
@@ -752,6 +928,35 @@ export default function ThreeDPortfolioTemplate() {
         ariaLabel="Technology stack row three"
       />
     </div>
+  </div>
+</section>
+
+<section id="education" className="mx-auto max-w-7xl px-6 py-16">
+  <p className="text-sm font-semibold text-cyan-300">Education</p>
+  <h2 className="mt-2 text-3xl font-black">Academic background</h2>
+
+  <div className="mt-8 grid gap-6 lg:grid-cols-2">
+    {education.map((item) => (
+      <div
+        key={`${item.school}-${item.degree}`}
+        className="rounded-[2rem] border border-white/10 bg-white/[0.05] p-6 backdrop-blur-xl"
+      >
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-300">
+            <GraduationCap className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-white">{item.degree}</h3>
+            <p className="mt-1 text-cyan-200">{item.school}</p>
+            <p className="mt-2 text-sm text-slate-400">{item.period}</p>
+            <p className="mt-3 inline-flex rounded-full border border-white/10 bg-slate-950/70 px-3 py-1 text-sm text-slate-200">
+              {item.detail}
+            </p>
+            <p className="mt-4 text-sm leading-7 text-slate-300">{item.notes}</p>
+          </div>
+        </div>
+      </div>
+    ))}
   </div>
 </section>
 <section id="projects" className="mx-auto max-w-7xl px-6 py-16" onMouseMove={handleMouseMove}>
@@ -811,43 +1016,47 @@ export default function ThreeDPortfolioTemplate() {
   <div className="grid gap-8 rounded-[2rem] border border-white/10 bg-white/[0.05] p-8 backdrop-blur-xl lg:grid-cols-[0.9fr_1.1fr]">
     <div>
       <p className="text-sm font-semibold text-cyan-300">
-        Project Request
+        Contact
       </p>
 
       <h2 className="mt-2 text-3xl font-black">
-        Need a website, app, or system?
+        Open to SOC, infrastructure, and security roles
       </h2>
 
       <p className="mt-4 leading-8 text-slate-300">
-        Send your project details here. I can help with portfolio websites,
-        Flutter apps, dashboards, UI improvements, QR scanner apps, PDF scanner
-        apps, and basic web systems.
+        Interested in graduate roles, internships, or collaborations in Security Operations,
+        infrastructure monitoring, network support, and incident response. Reach out via the
+        form or connect directly.
       </p>
+
+      <div className="mt-6 space-y-3">
+        <a
+          href={`mailto:${CONTACT.email}`}
+          className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/70 p-4 transition hover:border-cyan-300/30"
+        >
+          <Mail className="h-5 w-5 text-cyan-300" />
+          <span className="text-sm text-slate-200">{CONTACT.email}</span>
+        </a>
+        <a
+          href={CONTACT.linkedin}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/70 p-4 transition hover:border-cyan-300/30"
+        >
+          <ExternalLink className="h-5 w-5 text-cyan-300" />
+          <span className="text-sm text-slate-200">LinkedIn Profile</span>
+        </a>
+      </div>
 
       <div className="mt-6 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-5">
         <p className="font-semibold text-cyan-200">
-          Email notification enabled
+          References available
         </p>
 
         <p className="mt-2 text-sm leading-6 text-slate-300">
-          When a client submits this form, Formspree will send the project
-          request to your email.
+          Muhammad Hamiduddin bin Ismail (Head of Technology Enablement) and Muhammad Zahir bin
+          Halim (Head of Infrastructure) — available upon request via LinkedIn or email.
         </p>
-      </div>
-
-      <div className="mt-6 rounded-2xl border border-white/10 bg-slate-950/70 p-5">
-        <p className="font-semibold text-white">
-          Security features
-        </p>
-
-        <ul className="mt-3 space-y-2 text-sm text-slate-300">
-          <li>• Secure form endpoint through Formspree</li>
-          <li>• Input validation with required fields and length limits</li>
-          <li>• Honeypot field to reduce spam bots</li>
-          <li>• No passwords or API secrets stored in frontend code</li>
-          <li>• Warning for users not to submit private credentials</li>
-          <li>• HTTPS-ready when deployed on Vercel or Netlify</li>
-        </ul>
       </div>
     </div>
 
@@ -857,7 +1066,7 @@ export default function ThreeDPortfolioTemplate() {
       </main>
 
       <footer className="relative z-10 border-t border-white/10 px-6 py-6 text-center text-sm text-slate-500">
-        © {currentYear} Syed Developer Space. Portfolio template preview.
+        © {currentYear} {CONTACT.shortName}. Cybersecurity Portfolio.
       </footer>
 
       {selectedProject && (
